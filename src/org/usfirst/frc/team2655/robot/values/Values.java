@@ -7,4 +7,5 @@ public class Values {
 	public static final String CURRENT_TARGET = "PID_Target";
 	public static final String CURRENT_VALUE = "PID_Graph";
 	public static final String GYRO = "Gyro";
+	public static final String ROTATE_PID = "RotatePID Output";
 }

@@ -46,10 +46,12 @@ public class OI {
 				RobotProperties.MIN_MOVE_POWER,
 				RobotProperties.MID_MOVE_POWER);
 		resetButton = new Button(js0, controller.getResetButton());
+		rotateAutoButton = new Button(js0, controller.getRotateAutoButton());
 	}
 	
 	// The axis and buttons
 	public static FancyAxis driveAxis;
 	public static FancyAxis rotateAxis;
-	public static Button resetButton; 
+	public static Button resetButton;
+	public static Button rotateAutoButton;
 }

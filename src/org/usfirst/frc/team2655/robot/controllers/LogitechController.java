@@ -32,4 +32,10 @@ public class LogitechController extends IController {
 		return 2;
 	}
 
+	@Override
+	public int getRotateAutoButton() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

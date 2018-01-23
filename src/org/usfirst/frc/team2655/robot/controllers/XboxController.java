@@ -32,4 +32,10 @@ public class XboxController extends IController {
 		return 1;
 	}
 
+	@Override
+	public int getRotateAutoButton() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

@@ -27,7 +27,7 @@ public class Robot extends IterativeRobot {
 	public static WPI_TalonSRX[] motors = new WPI_TalonSRX[] {leftMotor, leftSlave1, leftSlave2, rightMotor, rightSlave1, rightSlave2};
 	
 	// The Gyro
-	ADIS16448_IMU imu;
+	public static ADIS16448_IMU imu;
 	
 	// The RobotDrive class handles all the motors
 	public static DifferentialDrive robotDrive = new DifferentialDrive(leftMotor, rightMotor);
@@ -69,6 +69,7 @@ public class Robot extends IterativeRobot {
 		// Add stuff to the dashboard
 		SmartDashboard.putBoolean(Values.DRIVE_CUBIC, true);
 		SmartDashboard.putBoolean(Values.ROTATE_CUBIC, false);
+		SmartDashboard.putNumber(Values.ROTATE_PID, 0);
 		SmartDashboard.putData(Values.CONTROLLER_SELECT, controllerSelect);
 		
 	}
@@ -81,21 +82,6 @@ public class Robot extends IterativeRobot {
 		if(selected != OI.selectedController) {
 			OI.selectController(selected);
 		}
-		// Update Gyro on dashboard
-		SmartDashboard.putNumber("Gyro-X", imu.getAngleX());
-		SmartDashboard.putNumber("Gyro-Y", imu.getAngleY());
-		SmartDashboard.putNumber("Gyro-Z", imu.getAngleZ());
-		
-		SmartDashboard.putNumber("Accel-X", imu.getAccelX());
-		SmartDashboard.putNumber("Accel-Y", imu.getAccelY());
-		SmartDashboard.putNumber("Accel-Z", imu.getAccelZ());
-		
-		SmartDashboard.putNumber("Pitch", imu.getPitch());
-		SmartDashboard.putNumber("Roll", imu.getRoll());
-		SmartDashboard.putNumber("Yaw", imu.getYaw());
-		
-		SmartDashboard.putNumber("Pressure: ", imu.getBarometricPressure());
-		SmartDashboard.putNumber("Temperature: ", imu.getTemperature());
 	}
 
 	/**
@@ -113,8 +99,23 @@ public class Robot extends IterativeRobot {
 		
 		if(OI.resetButton.isPressed()) {
 			imu.reset();
+			
+		}
+		if(OI.rotateAutoButton.isPressed()) {
+			driveBase.rotatePID(90);
 		}
 	}
+
+	@Override
+	public void testPeriodic() {
+		super.testPeriodic();
+		if(OI.resetButton.isPressed()) {
+			imu.reset();
+			
+		}
+	}
+	
+	
 	
 	
 }

@@ -34,4 +34,9 @@ public class PS2Controller extends IController {
 		return 3;
 	}
 
+	@Override
+	public int getRotateAutoButton() {
+		return 2;
+	}
+
 }
