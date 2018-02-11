@@ -8,21 +8,19 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
-import edu.wpi.first.wpilibj.hal.HAL;
-import edu.wpi.first.wpilibj.hal.FRCNetComm.tInstances;
-import edu.wpi.first.wpilibj.hal.FRCNetComm.tResourceType;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
-public class DriveBaseSubsystem  {
+public class DriveBaseSubsystem extends Subsystem  {
 		
 	// The rotate PID
 	
 	private PIDSource rotateSource = new PIDSource() {
     	@Override
     	public double pidGet() {
-    		return Robot.imu.getAngleZ();
+    		return 0;// Robot.imu.getAngleZ();
     	}
 
 		@Override
@@ -37,28 +35,28 @@ public class DriveBaseSubsystem  {
     private PIDOutput rotateOutput = new PIDOutput() {
     	@Override
     	public void pidWrite(double output) {
-    		SmartDashboard.putNumber(Values.ROTATE_PID, Robot.imu.getAngleZ());
+    		SmartDashboard.putNumber(Values.ROTATE_PID, 0/*Robot.imu.getAngleZ()*/);
     		if(Math.abs(rotatePIDController.getError()) < 1) {
     			rotatePIDController.disable();
     		}
     		drive(0, -output);
     	}
     };
-	PIDController rotatePIDController = new PIDController(0, 0, 0, 0, rotateSource, rotateOutput);
+	public final PIDController rotatePIDController;
 	private double rotateSetpoint = 0;
-	
-	/**
-	 * Initialize LiveWindow PIDs
-	 */
-	public DriveBaseSubsystem() {
-		rotatePIDController.setName("Rotate PID");
-		rotatePIDController.setContinuous(false);
-		LiveWindow.add(rotatePIDController);
-	}
 	
     public void initDefaultCommand() {}
     
-    /**
+    
+    
+    public DriveBaseSubsystem() {
+		super("Drive Base");
+		rotatePIDController = new PIDController(0, 0, 0, 0, rotateSource, rotateOutput);
+		//rotatePIDController.setContinuous(false);
+		//this.addChild("RotateController", rotatePIDController);
+	}
+
+	/**
      * Drive the robot
      * @param power Speed to drive
      * @param rotation Power to rotate with	
@@ -68,8 +66,7 @@ public class DriveBaseSubsystem  {
     }
     
     public void rotatePID(double degree) {
-    	//TODO calc
-    	rotateSetpoint = Robot.imu.getAngleZ() + degree;
+    	rotateSetpoint = 0;//Robot.imu.getAngleZ() + degree;
     	rotatePIDController.setSetpoint(rotateSetpoint);
     	rotatePIDController.enable();
     }

@@ -1,16 +1,14 @@
 package org.usfirst.frc.team2655.robot;
 
-import org.usfirst.frc.team2655.robot.controllers.IController;
 import org.usfirst.frc.team2655.robot.subsystems.DriveBaseSubsystem;
+import org.usfirst.frc.team2655.robot.subsystems.TestSubsystem;
 import org.usfirst.frc.team2655.robot.values.Values;
 
-import com.analog.adis16448.frc.ADIS16448_IMU;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
@@ -27,7 +25,7 @@ public class Robot extends IterativeRobot {
 	public static WPI_TalonSRX[] motors = new WPI_TalonSRX[] {leftMotor, leftSlave1, leftSlave2, rightMotor, rightSlave1, rightSlave2};
 	
 	// The Gyro
-	public static ADIS16448_IMU imu;
+	//public static ADIS16448_IMU imu;
 	
 	// The RobotDrive class handles all the motors
 	public static DifferentialDrive robotDrive = new DifferentialDrive(leftMotor, rightMotor);
@@ -36,21 +34,23 @@ public class Robot extends IterativeRobot {
 	public static DriveBaseSubsystem driveBase = new DriveBaseSubsystem();
 	
 	// Controller Selector
-	public static SendableChooser<IController> controllerSelect = new SendableChooser<IController>();
+	//public static SendableChooser<IController> controllerSelect = new SendableChooser<IController>();
 	
 	/**
 	 * Setup the motor controllers and the drive object
 	 */
 	@Override
 	public void robotInit() {
-		imu = new ADIS16448_IMU();
+		//imu = new ADIS16448_IMU();
 		// Setup controllers
-		for(IController c : OI.controllers) {
+		/*for(IController c : OI.controllers) {
 			controllerSelect.addObject(c.getName(), c);
 		}
 		controllerSelect.addDefault(OI.controllers.get(0).getName(), OI.controllers.get(0));
-		OI.selectController(OI.controllers.get(0));
-	    	    		
+		OI.selectController(OI.controllers.get(0));*/
+	    	    
+		final TestSubsystem ts = new TestSubsystem();
+		
 		// Setup the rear motors to follow (copy) the front motors
 		leftSlave1.follow(leftMotor);
 		leftSlave2.follow(leftMotor);
@@ -64,24 +64,19 @@ public class Robot extends IterativeRobot {
 			m.setSelectedSensorPosition(0, RobotProperties.TALON_PID_ID, RobotProperties.TALON_TIMEOUT);
 		}
 		
-		imu.reset(); // Make initial direction 0
+		//imu.reset(); // Make initial direction 0
 		
 		// Add stuff to the dashboard
 		SmartDashboard.putBoolean(Values.DRIVE_CUBIC, true);
 		SmartDashboard.putBoolean(Values.ROTATE_CUBIC, false);
 		SmartDashboard.putNumber(Values.ROTATE_PID, 0);
-		SmartDashboard.putData(Values.CONTROLLER_SELECT, controllerSelect);
+		//SmartDashboard.putData(Values.CONTROLLER_SELECT, controllerSelect);
 		
 	}
 	
 	@Override
 	public void robotPeriodic() {
-		super.robotPeriodic();
-		// Update controller choice
-		IController selected = controllerSelect.getSelected();
-		if(selected != OI.selectedController) {
-			OI.selectController(selected);
-		}
+		
 	}
 
 	/**
@@ -95,27 +90,14 @@ public class Robot extends IterativeRobot {
 		double power =  driveCubic ? OI.driveAxis.getValue() : OI.driveAxis.getValueLinear();
 		double rotation = -1 * (rotateCubic ? OI.rotateAxis.getValue() : OI.rotateAxis.getValueLinear());
 				
-		driveBase.drive(power, rotation);
 		
 		if(OI.resetButton.isPressed()) {
-			imu.reset();
+			//imu.reset();
 			
 		}
 		if(OI.rotateAutoButton.isPressed()) {
-			driveBase.rotatePID(90);
 		}
 	}
 
-	@Override
-	public void testPeriodic() {
-		super.testPeriodic();
-		if(OI.resetButton.isPressed()) {
-			imu.reset();
-			
-		}
-	}
-	
-	
-	
 	
 }
